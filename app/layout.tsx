@@ -1,8 +1,10 @@
-'use client'
+"use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import localFont from "next/font/local";
 
+import { Theme } from "@radix-ui/themes";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import "@radix-ui/themes/styles.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,11 +29,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryClientProvider client={queryClient}>
-          <TonConnectUIProvider manifestUrl="https://app.fafafa.io/tonconnect-manifest.json">
-          {children}
-          </TonConnectUIProvider>
-        </QueryClientProvider>
+        <Theme>
+          <QueryClientProvider client={queryClient}>
+            <TonConnectUIProvider manifestUrl="https://app.fafafa.io/tonconnect-manifest.json">
+              {children}
+            </TonConnectUIProvider>
+          </QueryClientProvider>
+        </Theme>
       </body>
     </html>
   );

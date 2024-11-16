@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+import { AssetsSDK, createApi } from "@ton-community/assets-sdk";
 import { TonConnectUI, useTonConnectUI } from "@tonconnect/ui-react";
 import { useMemo } from "react";
-import { AssetsSDK, createApi } from "@ton-community/assets-sdk";
 import {
   Address,
   Sender,
@@ -8,7 +9,6 @@ import {
   beginCell,
   storeStateInit,
 } from "@ton/ton";
-import { useQuery } from "@tanstack/react-query";
 
 class TonConnectSender implements Sender {
   constructor(private readonly provider: TonConnectUI) {}
@@ -70,23 +70,6 @@ class TonConnectSender implements Sender {
     });
   }
 }
-
-export const useJettonWalletData = (jettonMasterAddress: string) => {
-  const sdk = useTonSDK();
-  const jetton = sdk?.openJetton(Address.parse(jettonMasterAddress));
-
-  return useQuery({
-    queryKey: ["jettonAmount", jettonMasterAddress, jetton],
-    enabled: !!sdk && !!jetton,
-    queryFn: async () => {
-      const wallet = await jetton?.getWallet(sdk!.sender!.address!);
-      const data = await wallet?.getData();
-
-      return data;
-    },
-  });
-};
-
 export function useTonSDK() {
   const [TonConnectUI] = useTonConnectUI();
   const provider = useMemo(
